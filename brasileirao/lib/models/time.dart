@@ -1,13 +1,16 @@
 
 
+import 'package:apibrasileirao/models/titulo.dart';
+import 'package:flutter/painting.dart';
+
 class Time {
   // int id;
   String nome;
   String brasao;
   int pontos;
-  var cor;
+  Color? cor;
   int idAPI;
-  // List<Titulo> titulos = [];
+  List<Titulo> titulos = [];
 
   Time({
     // required this.id,
@@ -15,7 +18,7 @@ class Time {
     required this.nome,
     required this.pontos,
     required this.cor,
-    // required this.titulos,
+    required this.titulos,
     required this.idAPI,
   });
 }

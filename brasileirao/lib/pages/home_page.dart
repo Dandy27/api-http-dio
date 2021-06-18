@@ -1,8 +1,15 @@
 import 'package:apibrasileirao/pages/home_controller.dart';
+import 'package:apibrasileirao/pages/time_page.dart';
+import 'package:apibrasileirao/repositores/time_repositores.dart';
 import 'package:flutter/material.dart';
 
-class HomePage extends StatelessWidget {
-  var controller = HomeController();
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  HomeController controller = HomeController(TimesRepository());
 
   @override
   Widget build(BuildContext context) {
@@ -10,7 +17,7 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           'Brasileirão',
-          style: TextStyle(fontSize: 28),
+          style: TextStyle(fontSize: 20),
         ),
         centerTitle: true,
       ),
@@ -18,12 +25,21 @@ class HomePage extends StatelessWidget {
           itemBuilder: (BuildContext context, int index) {
             final tabela = controller.tabela;
             return ListTile(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => TimePage(
+                              key: Key(tabela[index].nome),
+                              time: tabela[index],
+                            )));
+              },
               leading: Image.network(tabela[index].brasao),
               title: Text(tabela[index].nome),
               trailing: Text(tabela[index].pontos.toString()),
             );
           },
-          separatorBuilder: (_, __) => Divider(),
+          separatorBuilder: (_, __) => const Divider(),
           itemCount: controller.tabela.length),
     );
   }

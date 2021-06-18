@@ -2,7 +2,7 @@ import 'package:apibrasileirao/pages/home_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
       title: 'Brasileirão',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primaryColor: Colors.green,
+        primaryColor: Colors.blueAccent,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: HomePage(),
