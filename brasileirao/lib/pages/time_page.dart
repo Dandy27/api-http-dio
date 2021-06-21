@@ -2,6 +2,7 @@ import 'package:apibrasileirao/models/titulo.dart';
 import 'package:flutter/material.dart';
 
 import 'package:apibrasileirao/models/time.dart';
+import 'package:provider/provider.dart';
 
 import 'add_titulo_page.dart';
 
@@ -24,19 +25,12 @@ class _TimePageState extends State<TimePage> {
         MaterialPageRoute(
             builder: (_) =>
                 // ignore: unnecessary_this
-                AddTituloPage(time: widget.time, onSave: this.addTitulo)));
+                AddTituloPage(
+                  time: widget.time,
+                )));
   }
 
-  void addTitulo(Titulo titulo) {
-    setState(() {
-      widget.time.titulos.add(titulo);
-    });
 
-    Navigator.pop(context);
-
-    ScaffoldMessenger.of(context)
-        .showSnackBar(const SnackBar(content: Text('Salvo com sucesso')));
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +45,7 @@ class _TimePageState extends State<TimePage> {
                 },
                 icon: const Icon(Icons.add))
           ],
+          // ignore: cast_nullable_to_non_nullable
           backgroundColor: widget.time.cor as Color,
           title: Text(widget.time.nome),
           centerTitle: true,
@@ -73,7 +68,7 @@ class _TimePageState extends State<TimePage> {
             Column(
               children: [
                 Padding(
-                  padding:const  EdgeInsets.all(40),
+                  padding: const EdgeInsets.all(40),
                   child: Image.network(
                     widget.time.brasao,
                     fit: BoxFit.cover,
@@ -81,7 +76,7 @@ class _TimePageState extends State<TimePage> {
                 ),
                 Text(
                   "Pontos: ${widget.time.pontos}",
-                  style: TextStyle(fontSize: 28),
+                  style: const TextStyle(fontSize: 28),
                 )
               ],
             ),
@@ -93,7 +88,10 @@ class _TimePageState extends State<TimePage> {
   }
 
   Widget titulos() {
-    final quantidade = widget.time.titulos.length;
+
+    final time =  Provider.of(context).times.firstWhere((t) => t.nome == widget.time.nome);
+    final quantidade = time.titulos.length;
+
     return quantidade == 0
         // ignore: avoid_unnecessary_containers
         ? Container(
@@ -103,8 +101,8 @@ class _TimePageState extends State<TimePage> {
             itemBuilder: (BuildContext context, int index) {
               return ListTile(
                 leading: const Icon(Icons.emoji_events),
-                title: Text(widget.time.titulos[index].campeonato),
-                trailing: Text(widget.time.titulos[index].ano),
+                title: Text(time.titulos  [index].campeonato),
+                trailing: Text(time.titulos  [index].ano) ,
               );
             },
             separatorBuilder: (_, __) => const Divider(),

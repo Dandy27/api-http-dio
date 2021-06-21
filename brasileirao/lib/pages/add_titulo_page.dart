@@ -1,16 +1,16 @@
+import 'package:apibrasileirao/repositores/time_repositores.dart';
 import 'package:flutter/material.dart';
 
 import 'package:apibrasileirao/models/time.dart';
 import 'package:apibrasileirao/models/titulo.dart';
+import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class AddTituloPage extends StatefulWidget {
   Time time;
-  ValueChanged<Titulo> onSave;
   AddTituloPage({
     Key? key,
     required this.time,
-    required this.onSave,
   }) : super(key: key);
 
   @override
@@ -22,11 +22,25 @@ class _AddTituloPageState extends State<AddTituloPage> {
   final _ano = TextEditingController();
   final _formyKey = GlobalKey<FormState>();
 
+  save() {
+    Provider.of<TimesRepository>(context, listen: false).addTitulo(
+        time: widget.time,
+        titulo: Titulo(campeonato: _campeonato.text, ano: _ano.text));
+
+    Navigator.pop(context);
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Salvo com Sucesso'),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add Titulo'),
+        backgroundColor: widget.time.cor,
+        title: const Text('Add Titulo '),
         centerTitle: true,
       ),
       body: Form(
@@ -52,7 +66,7 @@ class _AddTituloPageState extends State<AddTituloPage> {
               ),
             ),
             Padding(
-              padding:const  EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
               child: TextFormField(
                 controller: _campeonato,
                 decoration: const InputDecoration(
@@ -73,25 +87,25 @@ class _AddTituloPageState extends State<AddTituloPage> {
               margin: const EdgeInsets.all(24),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                    primary: Colors.blueAccent, padding: const EdgeInsets.all(16)),
+                    primary: widget.time.cor,
+                    padding: const EdgeInsets.all(16)),
                 onPressed: () {
                   if (_formyKey.currentState!.validate()) {
-                    widget.onSave(
-                        Titulo(ano: _ano.text, campeonato: _campeonato.text));
+                    save();
                   }
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   // ignore: prefer_const_literals_to_create_immutables
                   children: [
-                   const Icon(Icons.check),
-                    const  SizedBox(
+                    const Icon(Icons.check),
+                    const SizedBox(
                       width: 10,
                     ),
                     // Padding(padding: EdgeInsets.symmetric(vertical: 16)),
-                     const Text(
+                    const Text(
                       "Salvar",
-                      style:  TextStyle(fontSize: 20),
+                      style: TextStyle(fontSize: 20),
                     ),
                   ],
                 ),

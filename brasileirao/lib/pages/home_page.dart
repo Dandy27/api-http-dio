@@ -2,6 +2,7 @@ import 'package:apibrasileirao/pages/home_controller.dart';
 import 'package:apibrasileirao/pages/time_page.dart';
 import 'package:apibrasileirao/repositores/time_repositores.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -21,26 +22,30 @@ class _HomePageState extends State<HomePage> {
         ),
         centerTitle: true,
       ),
-      body: ListView.separated(
-          itemBuilder: (BuildContext context, int index) {
-            final tabela = controller.tabela;
-            return ListTile(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => TimePage(
-                              key: Key(tabela[index].nome),
-                              time: tabela[index],
-                            )));
+      body: Consumer<TimesRepository>(
+        builder: (context, repositorio, child) {
+          return ListView.separated(
+              itemBuilder: (BuildContext context, int index) {
+                final tabela = repositorio.times;
+                return ListTile(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => TimePage(
+                                  key: Key(tabela[index].nome),
+                                  time: tabela[index],
+                                )));
+                  },
+                  leading: Image.network(tabela[index].brasao),
+                  title: Text(tabela[index].nome),
+                  trailing: Text(tabela[index].pontos.toString()),
+                );
               },
-              leading: Image.network(tabela[index].brasao),
-              title: Text(tabela[index].nome),
-              trailing: Text(tabela[index].pontos.toString()),
-            );
-          },
-          separatorBuilder: (_, __) => const Divider(),
-          itemCount: controller.tabela.length),
+              separatorBuilder: (_, __) => const Divider(),
+              itemCount: repositorio.times.length);
+        },
+      ),
     );
   }
 }
